@@ -7,9 +7,11 @@ import java.util.Scanner;
 
 public class Main 
 {
+	
 	private static int stappen;
 	static int[] deckPlayer1;
 	static int[] deckPlayer2;
+
 
 	static int[] deckOfCards = { 1,1,1,1,
 			2,2,2,2,
@@ -27,6 +29,7 @@ public class Main
 	
 	static ArrayList<Integer> deckPlayer1List = new ArrayList<Integer>();
 	static ArrayList<Integer> deckPlayer2List = new ArrayList<Integer>();
+	static ArrayList<Integer> hold = new ArrayList<Integer>();
 
 		
 	static void arrayToListPlayer1(int[] ar){
@@ -78,26 +81,68 @@ public class Main
 	  int number1 = deckPlayer1List.get(0);
 	  int number2 = deckPlayer2List.get(0);
 	  
-	  if(number1 > number2){
+	  
+	  
+	  if(number1 != number2){
+	 
+		  if(number1 > number2){
+			  if(hold.size() != 0){
+				  addHold(deckPlayer1List);
+				  addAndRemove(deckPlayer1List, deckPlayer2List);
+			  }
 		  
-		  addAndRemove(deckPlayer1List, deckPlayer2List);
+			  else{
+				  addHold(deckPlayer2List);
+				  addAndRemove(deckPlayer1List, deckPlayer2List);
+			  }
+		  }
+	  
+		  else{
+			  
+			  if(hold.size() != 0){
+				  addHold(deckPlayer2List);
+				  addAndRemove(deckPlayer2List, deckPlayer1List);
+			  }
 		  
-	  }
+			  else{
+				  addHold(deckPlayer2List);
+				  addAndRemove(deckPlayer2List, deckPlayer1List);
+			  }
+
+		  	}
+	  	}
 	  
 	  else{
-		  addAndRemove(deckPlayer2List, deckPlayer1List);
+		  hold();
 		  
 	  }
+  }
+  
+  public static void hold(){
 	  
+	  hold.add(deckPlayer1List.get(0));
+	  hold.add(deckPlayer2List.get(0));
+	  deckPlayer1List.remove(0);
+	  deckPlayer2List.remove(0);
+	  
+  }
+  
+  public static void addHold(ArrayList<Integer> list1){
+	  
+	  while(hold.size() !=0){
+		  list1.add(hold.get(0));
+		  hold.remove(0);
+		  
+	  }
   }
   
   private static void addAndRemove(ArrayList<Integer> list1, ArrayList<Integer> list2){
 	  
 	  //list 1 is winner
 	  
-	  
-	  list1.add(list2.get(0));
 	  list1.add(list1.get(0));
+	  list1.add(list2.get(0));
+
 	  list1.remove(0);
 	  list2.remove(0);
 	  
@@ -137,10 +182,8 @@ public class Main
     arrayToListPlayer1(deckPlayer1);
     arrayToListPlayer2(deckPlayer2);
     checkWinner();
-  
-    
+    print();
 
-    
 	Scanner scanner = new Scanner(System.in);
 
 
