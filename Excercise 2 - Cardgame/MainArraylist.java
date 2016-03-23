@@ -5,7 +5,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Main 
+public class MainArraylist
 {
 	
 	private static int stappen;
