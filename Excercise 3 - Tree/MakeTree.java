@@ -1,32 +1,33 @@
 package Tree;
 
 public class MakeTree {
-    public static void main(String[] args) {
+	public static void main(String[] args) {
 
-        Tree tree = new Tree();
+		Tree tree = new Tree();
 
-        tree.addNode("root", null);
-        tree.addNode("A1", "root");
-        tree.addNode("B1", "root");
-        tree.addNode("C1", "root");
-        tree.addNode("B2", "A1");
-        tree.addNode("C2", "A1");
-        tree.addNode("A2", "B1");
-        tree.addNode("C2", "B1");
-        tree.addNode("A2", "C1");
-        tree.addNode("B2", "C1");
+		tree.addNode("root", null);
+		tree.addNode("A", "root");
+		tree.addNode("B", "root");
+		tree.addNode("C", "root");
+		tree.addNode("D", "A");
+		tree.addNode("E", "A");
+		tree.addNode("F", "B");
+		tree.addNode("G", "B");
+		tree.addNode("H", "C");
+		tree.addNode("I", "C");
 
+		tree.addNode("J", "D");
+		tree.addNode("K", "E");
+		tree.addNode("L", "F");
+		tree.addNode("M", "G");
+		tree.addNode("N", "H");
+		tree.addNode("O", "I");
 
-        tree.display("root", 0);
-        
-        System.out.println("");
-        System.out.println("--test get children from A1:");
-        tree.getChildren("A1");
-        
-        System.out.println("");
-        System.out.println("--test get children from A1 on index 1:");
-        tree.getChildrenOnIndex("A1", 1);
-    }
-    
-    
+		tree.display("root", 0);
+
+		System.out.println("");
+		System.out.println("All permutations: ");
+		tree.printAllPermutations();
+	}
+
 }
