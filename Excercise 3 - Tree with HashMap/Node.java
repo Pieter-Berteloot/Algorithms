@@ -4,32 +4,27 @@ import java.util.ArrayList;
 
 public class Node {
 
-    private String identifier;
-    private ArrayList<String> children;
 
+	private String identifier;
+	private ArrayList<String> children;
 
-    public Node(String a) {
-        identifier = a;
-        children = new ArrayList<String>();
-    }
+	public Node(String a) {
+		identifier = a;
+		children = new ArrayList<String>();
+	}
 
+	public String getIdentifier() {
+		return identifier;
+	}
 
-    public String getIdentifier() {
-        return identifier;
-    }
+	public ArrayList<String> getChildren() {
+		return children;
 
-    public ArrayList<String> getChildren() {
-        return children;
-        
-    }
+	}
 
-    public void addChild(String identifier) {
-        children.add(identifier);
-        
-    	
-        
-    }
+	public void addChild(String identifier) {
+		children.add(identifier);
 
-    
-    
+	}
+
 }
