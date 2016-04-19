@@ -2,79 +2,53 @@ package Tree;
 
 import java.util.ArrayList;
 
-public class Tree<E> {
+public class Tree {
 
-    private E data;
 	public ArrayList<Node> nodes = new ArrayList<Node>();
-	public ArrayList<E> elements = new ArrayList<E>(); 
-	
+	public ArrayList<String> elements = new ArrayList<String>();
+	public Node root;
+
+	private ArrayList<Node> lastNodes = new ArrayList<Node>();
+
 	public Tree() {
-
+		this.root = new Node("root", null);
 	}
-	
 
-	public Node getNodeFromIdentifier(String identifier) {
-
-		boolean nodeFound = false;
-		int i = 0;
-		Node node = null;
-
-		while (nodeFound == false) {
-			if (i < nodes.size()) {
-				String nodeIdentifier = nodes.get(i).getIdentifier();
-
-				if (nodeIdentifier == identifier) {
-					nodeFound = true;
-					node = nodes.get(i);
-					return node;
-
-				} else {
-
-					i++;
-					
-				}
-			}
-		}
-		return node;
-	}
-	
-	public void addElements(E e){
-		
+	public void addElements(String e) {
+		System.out.println("You have added " + e + " to elements.");
 		elements.add(e);
 	}
-	
 
-	public Node addNode(String identifier) {
-
-		Node node = new Node(identifier, 0);
-		nodes.add(node);
-		return node;
-
+	public ArrayList<String> getElements() {
+		return elements;
 	}
 
-	public void addNode(String identifier, String parent) {
 
-		Node nodeParent = getNodeFromIdentifier(parent);
-
-		Node node = new Node(identifier, nodeParent.getDepth() + 1);
-		nodes.add(node);
-		nodeParent.addChild(identifier);
-
+	public Node getRoot() {
+		return root;
 	}
 
-	public ArrayList<String> getChildren(String identifier) {
+	public ArrayList<Node> getLastNodes() {
 
-		Node node = getNodeFromIdentifier(identifier);
-
-		ArrayList<String> children = node.getChildren();
-		return children;
+		return lastNodes;
 	}
 
-	public String getChildrenOnIndex(String identifier, int index) {
+	public void makeTree(ArrayList<String> arrayList, Node parent) {
 
-		Node node = getNodeFromIdentifier(identifier);
-		ArrayList<String> children = node.getChildren();
+		for (String element : arrayList) {
+			Node cursor = new Node(element, parent);
+			parent.addChild(cursor);
+			ArrayList<String> childrenArray = new ArrayList<String>();
+			childrenArray.addAll(arrayList);
+			childrenArray.remove(element);
 
-		return children.get(index);
+			if (childrenArray.size() > 0) {
+				makeTree(childrenArray, cursor);
+			}
+
+			else {
+				lastNodes.add(cursor);
+			}
+		}
 	}
 }
