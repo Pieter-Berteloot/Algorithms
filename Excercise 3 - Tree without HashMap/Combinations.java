@@ -2,6 +2,10 @@ package Tree;
 
 public class Combinations {
 
+	/**
+	 * Print all the Combinations possible with the given elements
+	 * @param root	the root of your tree
+	 */
 	public static void printAllCombitnations(Node root) {
 		System.out.println("-----------------------------------------------");
 		System.out.println("Calculating all Combinations:");

@@ -6,12 +6,20 @@ public class UserInput {
 
 	public ArrayList<String> elements = new ArrayList<String>();
 
+
 	public static void main(String[] args) {
+
 
 		Tree tree = new Tree();
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Type in the Tree elements.");
 
+		/**
+		 * Allows the user to input elements
+		 * when finished, the combinations and permutations
+		 * will be printed.
+		 */
+		
 		while (true) {
 			String next = scanner.next();
 
