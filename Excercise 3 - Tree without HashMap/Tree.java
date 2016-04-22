@@ -43,27 +43,31 @@ public class Tree {
 	}
 
 	/**
-	 * @return	the ArrayList with the lastNodes
+	 * @return the ArrayList with the lastNodes
 	 */
 	public ArrayList<Node> getLastNodes() {
 		return lastNodes;
 	}
 
 	/**
-	 * @param addElements 	the Array of remaining elements you want to add to your tree
-	 * @param parent 		the parent node for which you want to add a child
+	 * @param addElements
+	 *            the Array of remaining elements you want to add to your tree
+	 * @param parent
+	 *            the parent node for which you want to add a child
 	 */
 	public void makeTree(ArrayList<String> addElements, Node parent) {
 
 		for (String element : addElements) {
 			Node child = new Node(element, parent);
 			parent.addChild(child);
-			ArrayList<String> childrenArray = new ArrayList<String>();	//create new array so we can delete
-			childrenArray.addAll(addElements);							//the element that we already
-			childrenArray.remove(element);								//added to our tree
 
+			// create new array so we can delete the element that we already
+			// added to our tree
+			ArrayList<String> childrenArray = new ArrayList<String>();
+			childrenArray.addAll(addElements);
+			childrenArray.remove(element);
 			if (childrenArray.size() > 0) {
-				makeTree(childrenArray, child);	//Recursive call
+				makeTree(childrenArray, child); // Recursive call
 			}
 
 			else {
