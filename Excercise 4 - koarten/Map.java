@@ -23,10 +23,37 @@ public class Map {
 		addAttributes();
 	}
 
+	/**
+	 * @return Graph g
+	 */
 	public Graph getGraph() {
 		return g;
 	}
 
+	/**
+	 * Makes a road between 2 nodes
+	 * 
+	 * @param node1
+	 *            from city
+	 * @param node2
+	 *            to city
+	 * @param weight
+	 *            the weight of the road
+	 */
+	private void makeRoad(String node1, String node2, int weight) {
+		if (g.getNode(node1) == null)
+			g.addNode(node1);
+
+		if (g.getNode(node2) == null)
+			g.addNode(node2);
+
+		g.addEdge(node1 + "-" + node2, node1, node2, true).addAttribute("weight", weight);
+		g.addEdge(node2 + "-" + node1, node2, node1, true).addAttribute("weight", weight);
+	}
+
+	/**
+	 * calls makeRoad for all the roads
+	 */
 	private void addRoads() {
 		makeRoad("Brugge", "Kortrijk", 56);
 		makeRoad("Brugge", "Gent", 50);
@@ -49,6 +76,11 @@ public class Map {
 		makeRoad("Leuven", "Luik", 82);
 	}
 
+	/**
+	 * Adds a label with the name to all nodes Adds a label with the weight of
+	 * the roads Adds an attribute that counts how many cars there are on the
+	 * road
+	 */
 	private void addAttributes() {
 		for (Node n : g)
 			n.addAttribute("label", n.getId());
@@ -59,26 +91,27 @@ public class Map {
 		}
 	}
 
-	private void makeRoad(String node1, String node2, int weight) {
-		if (g.getNode(node1) == null)
-			g.addNode(node1);
-
-		if (g.getNode(node2) == null)
-			g.addNode(node2);
-
-		g.addEdge(node1 + "-" + node2, node1, node2, true).addAttribute("weight", weight);
-		g.addEdge(node2 + "-" + node1, node2, node1, true).addAttribute("weight", weight);
-	}
-
+	/**
+	 * Adds 1k cars to a road, adds 1 to carAmount and weight.
+	 * 
+	 * @param road
+	 *            the road you want to add 1k cars
+	 */
 	public void addCars(String road) {
 		Edge edge = g.getEdge(road);
 
 		edge.changeAttribute("carAmount", edge.getNumber("carAmount") + 1);
 		edge.changeAttribute("weight", edge.getNumber("weight") + 1);
 		edge.changeAttribute("label", "" + (int) edge.getNumber("weight"));
-		System.out.println("Added 1k cars on road: " + edge.getId()) ;
+		System.out.println("Added 1k cars on road: " + edge.getId());
 	}
 
+	/**
+	 * Adds an amount of cars to all roads
+	 * 
+	 * @param amount
+	 *            amount of cars
+	 */
 	public void addCarsToAll(int amount) {
 		for (Edge e : g.getEachEdge()) {
 			e.changeAttribute("carAmount", e.getNumber("carAmount") + amount);
@@ -88,12 +121,15 @@ public class Map {
 		}
 	}
 
+	/**
+	 * User input
+	 */
 	public static void main(String[] args) {
 
 		Map map = new Map();
 		Simulate s = new Simulate(map);
 
-		// css
+		// css for display
 		String css = "edge.important {size: 3px; fill-mode: dyn-plain;fill-color: blue, green, red;shape: cubic-curve; }"
 				+ "node { size: 10px; }" + "edge { fill-color: grey;size: 2px"
 				+ ";stroke-mode: plain; stroke-color: black; " + "stroke-width: 1px;" + "shape: flow; }";
