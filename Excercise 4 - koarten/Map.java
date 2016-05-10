@@ -1,17 +1,6 @@
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Scanner;
-
-import org.graphstream.algorithm.Dijkstra;
-import org.graphstream.graph.Edge;
-import org.graphstream.graph.Graph;
-import org.graphstream.graph.Node;
-import org.graphstream.graph.Path;
+import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.SingleGraph;
-import org.graphstream.stream.ProxyPipe;
-import org.graphstream.stream.file.FileSourceDGS;
 import org.graphstream.ui.view.Viewer;
 
 public class Map {
@@ -88,6 +77,7 @@ public class Map {
 		for (Edge e : g.getEachEdge()) {
 			e.addAttribute("label", "" + (int) e.getNumber("weight"));
 			e.addAttribute("carAmount", 0);
+			e.addAttribute("amoundOfAccidents", 0);
 		}
 	}
 
@@ -96,14 +86,17 @@ public class Map {
 	 * 
 	 * @param road
 	 *            the road you want to add 1k cars
+	 *            
+	 * @return The road on which you added 1k cars
 	 */
-	public void addCars(String road) {
+	public String addCars(String road) {
 		Edge edge = g.getEdge(road);
 
 		edge.changeAttribute("carAmount", edge.getNumber("carAmount") + 1);
 		edge.changeAttribute("weight", edge.getNumber("weight") + 1);
 		edge.changeAttribute("label", "" + (int) edge.getNumber("weight"));
-		System.out.println("Added 1k cars on road: " + edge.getId());
+
+		return "Added 1k cars on road: " + edge.getId();
 	}
 
 	/**
@@ -111,44 +104,42 @@ public class Map {
 	 * 
 	 * @param amount
 	 *            amount of cars
+	 * 
+	 * @return String added how much cars were added to all roads
 	 */
-	public void addCarsToAll(int amount) {
+	public String addCarsToAll(int amount) {
 		for (Edge e : g.getEachEdge()) {
 			e.changeAttribute("carAmount", e.getNumber("carAmount") + amount);
 			e.changeAttribute("weight", e.getNumber("weight") + amount);
 			e.changeAttribute("label", "" + (int) e.getNumber("weight"));
-			System.out.println("added " + amount * 1000 + " cars to " + e.getId());
 		}
+
+		return "added " + amount * 1000 + " to all roads ";
 	}
 
 	/**
-	 * User input
+	 * User input We start with no cars on the roads
+	 * 
 	 */
 	public static void main(String[] args) {
 
 		Map map = new Map();
 		Simulate s = new Simulate(map);
+		System.setProperty("org.graphstream.ui.renderer", "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
 
 		// css for display
-		String css = "edge.important {size: 3px; fill-mode: dyn-plain;fill-color: blue, green, red;shape: cubic-curve; }"
-				+ "node { size: 10px; }" + "edge { fill-color: grey;size: 2px"
-				+ ";stroke-mode: plain; stroke-color: black; " + "stroke-width: 1px;" + "shape: flow; }";
+		String css = "edge.accident {size: 3px; fill-mode: dyn-plain;fill-color: red;}" + "node { size: 10px; }"
+				+ "edge { fill-color: grey; size: 2px; shape: cubic-curve; }";
 		map.getGraph().addAttribute("ui.stylesheet", css);
 
 		// viewer
 		Viewer viewer = map.getGraph().display();
 
-		// proxyPipe so we can update our viewer
-		ProxyPipe pipe = viewer.newViewerPipe();
-		pipe.addAttributeSink(map.getGraph());
-
 		// scanner
-
 		System.out.println("------------------Welcome to Hoehel Koarten---------------");
 		System.out.println("------Option: [a]: Add amound of cars to all roads");
 		System.out.println("------Option: [b]: Add 1k cars to a road");
 		System.out.println("------Option: [c]: Calculate the ShortestPath");
-
 		Scanner scanner = new Scanner(System.in);
 
 		while (true) {
@@ -157,20 +148,18 @@ public class Map {
 			switch (input) {
 
 			case "a":
-				System.out.println("Type the amound of cars (in k) you want to add to all roads");
+				System.out.println("Type the amount of cars (in k) you want to add to all roads");
 
 				String inputInt = scanner.next();
-				map.addCarsToAll(Integer.parseInt(inputInt));
+				System.out.println(map.addCarsToAll(Integer.parseInt(inputInt)));
 				s.simulateMap();
-				pipe.pump();
 				break;
 
 			case "b":
 				System.out.println("Type the Road you want to add 1k cars to. Example: Brugge-Gent");
 				String inputRoad = scanner.next();
-				map.addCars(inputRoad);
+				System.out.println(map.addCars(inputRoad));
 				s.simulateMap();
-				pipe.pump();
 				break;
 
 			case "c":
@@ -180,7 +169,7 @@ public class Map {
 				String to = scanner.next();
 				System.out.println("Calculate shortest route by weight or carAmount");
 				String type = scanner.next();
-				ShortestPath.printShortestPath(map, from, to, type);
+				System.out.println(ShortestPath.printShortestPath(map, from, to, type));
 			}
 		}
 	}

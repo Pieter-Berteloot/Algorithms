@@ -3,6 +3,8 @@ import org.graphstream.graph.Edge;
 public class Simulate {
 
 	private Map map;
+	private static int addWeightOnFirstAccident = 30;
+	private static int addWeightOnMoreAccident = 50;
 
 	public Simulate(Map map) {
 		this.map = map;
@@ -19,14 +21,14 @@ public class Simulate {
 
 		int carAmount = (int) e.getNumber("carAmount");
 		if (Math.random() < (0.001 * carAmount)) {
-			e.addAttribute("ui.class", "important");
+			e.addAttribute("ui.class", "accident");
 			return true;
 		} else
 			return false;
 	}
 
 	/**
-	 * Adds weight to the roud if there has been an accident
+	 * Adds weight to the road if there has been an accident
 	 * 
 	 * @param e
 	 *            the road
@@ -34,14 +36,24 @@ public class Simulate {
 	private void addWeightonAccident(Edge e) {
 
 		if (simulateAccident(e) == true) {
-			e.changeAttribute("weight", e.getNumber("weight") + 30);
+
+			if ( e.getNumber("amoundOfAccidents") == 0){
+				e.changeAttribute("weight", e.getNumber("weight") + addWeightOnFirstAccident);
+				System.out.println("Accident on: " + e.getId() + " +30 weight");
+			}
+			else{
+				e.changeAttribute("weight", e.getNumber("weight") + addWeightOnMoreAccident);
+				System.out.println("Accident on: " + e.getId() + " +50 weight");
+			}
+
 			e.addAttribute("label", "" + (int) e.getNumber("weight"));
-			System.out.println("Accident on: " + e.getId() + " +30 weight");
+			e.changeAttribute("amoundOfAccidents", e.getNumber("amoundOfAccidents") + 1);
 
 			while (simulateAccident(e) == true) {
-				e.changeAttribute("weight", e.getNumber("weight") + 50);
+				e.changeAttribute("weight", e.getNumber("weight") + addWeightOnMoreAccident);
 				e.addAttribute("label", "" + (int) e.getNumber("weight"));
 				System.out.println("Accident on: " + e.getId() + " +50 weight");
+				e.changeAttribute("amoundOfAccidents", e.getNumber("amoundOfAccidents") + 1);
 			}
 		}
 	}
@@ -50,7 +62,7 @@ public class Simulate {
 	 * simulates all the roads on the map for accidents
 	 */
 	public void simulateMap() {
-
+		
 		for (Edge e : map.getGraph().getEachEdge()) {
 			addWeightonAccident(e);
 		}

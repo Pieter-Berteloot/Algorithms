@@ -1,4 +1,5 @@
 import org.graphstream.algorithm.Dijkstra;
+import org.graphstream.graph.Path;
 
 public class ShortestPath {
 
@@ -14,14 +15,12 @@ public class ShortestPath {
 	 * @param type
 	 *            shortest path by weight or carAmound
 	 */
-	public static void printShortestPath(Map map, String from, String to, String type) {
+	public static Path printShortestPath(Map map, String from, String to, String type) {
 
 		Dijkstra dijkstra = new Dijkstra(Dijkstra.Element.EDGE, null, type);
 		dijkstra.init(map.getGraph());
 		dijkstra.setSource(map.getGraph().getNode(from));
 		dijkstra.compute();
-		System.out.println(dijkstra.getPath(map.getGraph().getNode(to)));
-		dijkstra.clear();
+		return dijkstra.getPath(map.getGraph().getNode(to));
 	}
-
 }
